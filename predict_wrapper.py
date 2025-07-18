@@ -22,18 +22,18 @@ def run_lama_predict(
     lama_model_dir_abs = os.path.abspath(lama_model_dir)
     predict_script_path = os.path.join(lama_root, "bin", "predict.py")
 
-    # --- Step 0: Validate model config path ---
+   
     config_path = os.path.join(lama_model_dir_abs, "config.yaml")
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"[ERROR] config.yaml not found at {config_path}")
 
-    # --- Step 1: Create temp and output dirs ---
+
     os.makedirs(temp_input_dir, exist_ok=True)
     if os.path.exists(output_dir_abs):
         shutil.rmtree(output_dir_abs)
     os.makedirs(output_dir_abs, exist_ok=True)
 
-    # --- Step 2: Save input image and mask ---
+    
     image_path = os.path.join(temp_input_dir, "image.png")
     mask_path = os.path.join(temp_input_dir, "image_mask.png")
     image_pil.save(image_path)
@@ -44,7 +44,7 @@ def run_lama_predict(
     image_pil.save(os.path.join("debug", "last_input_image.png"))
     mask_pil.save(os.path.join("debug", "last_input_mask.png"))
 
-    # --- Step 3: Run LaMa as subprocess ---
+    
     command = [
         sys.executable,  # Use current Python interpreter
         predict_script_path,
@@ -54,7 +54,7 @@ def run_lama_predict(
         f"outdir={output_dir_abs}",
     ]
 
-    # 👇 Explicitly update PYTHONPATH so LaMa can import saicinpainting properly
+    # update PYTHONPATH so LaMa can import saicinpainting properly
     env = os.environ.copy()
     lama_python_path = lama_root + ":" + env.get("PYTHONPATH", "")
     env["PYTHONPATH"] = lama_python_path
@@ -79,7 +79,7 @@ def run_lama_predict(
         print("[STDERR]:\n", e.stderr)
         raise RuntimeError(f"LaMa subprocess failed:\n{e.stderr.strip()}")
 
-    # --- Step 4: Get output image ---
+    # output image
     png_files = [f for f in os.listdir(output_dir_abs) if f.lower().endswith(".png")]
     if not png_files:
         raise FileNotFoundError(f"[ERROR] No output PNG found in {output_dir_abs}")
