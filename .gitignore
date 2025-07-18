@@ -1,0 +1,34 @@
+__pycache__/
+*.py[cod]
+*.so
+*.log
+*.DS_Store
+*.egg-info/
+.env
+.venv/
+.vscode/
+.idea/
+
+*.ckpt
+*.pth
+*.pt
+
+# Should use external links
+segment_anything/
+sam_vit_h_4b8939.pth
+
+# Ignore subfolders inside lama
+lama/LaMa_models/
+lama/models/
+lama/outputs/
+lama/docker/
+lama/bin/
+
+*.npy
+
+debug
+debug_overlay.png
+input_images/
+lama_temp_inputs/
+outputs/
+predict_output/
