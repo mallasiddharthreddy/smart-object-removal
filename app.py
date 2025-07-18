@@ -16,11 +16,11 @@ import sys
 if lama_root not in sys.path:
     sys.path.insert(0, lama_root)
 
-# --- Streamlit Page Config ---
+# Streamlit Page Config
 st.set_page_config(page_title="SAM + LaMa Inpainting", layout="wide")
 st.title("🎯 SAM + LaMa Image Inpainting")
 
-# --- Upload Section ---
+# Upload Section 
 st.header("1. Upload Your PNG Image")
 uploaded_file = st.file_uploader("Upload a PNG image", type=["png"])
 
@@ -30,7 +30,7 @@ if uploaded_file:
     width, height = original_image.size
     st.image(original_image, caption="Original Image", use_column_width=False)
 
-# --- Bounding Box Drawing ---
+# Bounding Box Drawing 
 st.header("2. Draw Bounding Box to Select Object")
 bbox = None
 
@@ -81,10 +81,10 @@ if original_image and bbox:
             multimask_output=False
         )
 
-        # --- Step 1: Get binary mask from SAM
+        # binary mask from SAM
         mask = masks[0].astype(np.uint8) * 255
 
-        # --- Step 2: Dilation + Blur + Final Soft Blur
+        # Dilation + Blur + Final Soft Blur to expand SAM mask
         kernel = np.ones((25, 25), np.uint8)
         dilated = cv2.dilate(mask, kernel, iterations=1)
         blurred = cv2.GaussianBlur(dilated, (17, 17), 0)
@@ -94,7 +94,7 @@ if original_image and bbox:
         mask_image = Image.fromarray(final_mask).convert("L")
 
 
-        # --- Save .npy for debugging
+        # Saving .npy for debugging and clarity
         try:
             np.save(os.path.abspath("streamlit_input_array.npy"), np.array(original_image))
             np.save(os.path.abspath("streamlit_mask_array.npy"), final_mask)
@@ -102,7 +102,7 @@ if original_image and bbox:
         except Exception as e:
             print(f"❌ Failed to save .npy files: {e}")
 
-        # --- Optional: Debug overlay to visually verify
+        
         overlay = np.array(original_image).copy()
         overlay[final_mask == 255] = [255, 0, 0]  # red where mask is
         Image.fromarray(overlay).save("debug_overlay.png")
@@ -117,7 +117,7 @@ if original_image and bbox:
             output_dir="predict_output"
         )
 
-        # --- Display Results ---
+        # Display Results
         st.markdown("### 4. Results")
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -133,7 +133,7 @@ if original_image and bbox:
         inpainted_image.save(buffer, format="PNG")
         buffer.seek(0)
 
-        # --- Download ---
+        # Download 
         st.download_button(
             label="Download Inpainted Image",
             data=buffer ,
