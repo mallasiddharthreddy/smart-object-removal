@@ -20,7 +20,7 @@ Below is the step-by-step interface for object removal using the app:
 ### 2️⃣ Upload image
 ![Step 2 – Mask](images/upload_image.png)
 
-### 3️⃣ Selectig object to remove (Bounding Box)
+### 3️⃣ Selecting object to remove (Bounding Box)
 ![Step 3 – Output](images/bbox_using_sam.png)
 
 ### 4️⃣ Result + download button
